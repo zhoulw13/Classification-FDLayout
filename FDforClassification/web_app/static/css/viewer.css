@@ -1,0 +1,25 @@
+.panel {
+    padding-left: 1px;
+    padding-right: 1px;
+    margin-bottom: 1px;
+    border-color: #0a0a0a;
+}
+
+.glyph-set {
+    position: relative;
+    height: 93%;
+}
+
+.btn-head {
+    padding: 0px 5px;
+}
+
+.panel-heading {
+    padding: 5px 5px;
+}
+
+.focusLine {
+            fill: none;
+            stroke: steelblue;
+            stroke-width: 0.5px;
+}

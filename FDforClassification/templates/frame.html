@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{%  static 'bootstrap/dist/css/bootstrap.css'%}" />
+    <link rel="stylesheet" type="text/css" href="{%  static 'leaflet/dist/leaflet.css'%}" />
+
+    <title>{% block title %}{% endblock %}</title>
+    {% block css %}{% endblock %}
+    {% block js %}{% endblock %}
+</head>
+<body style="padding-top: 55px">
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <div class="navbar-brand">FDforClassification</div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid" style="height: 850px">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script type="text/javascript" src="{% static 'jquery/dist/jquery.js'%}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/dist/js/bootstrap.js' %}"></script>
+    <script type="text/javascript" src="{% static 'leaflet/dist/leaflet.js' %}"></script>
+    <script type="text/javascript" src="{% static 'd3/build/d3.js' %}"></script>
+    <script type="text/javascript" src="{% static 'd3-hierarchy/build/d3-hierarchy.js' %}"></script>
+    <script type="text/javascript" src="{% static 'd3-array/build/d3-array.js' %}"></script>
+    <script type="text/javascript" src="{% static 'd3-geo/build/d3-geo.js' %}"></script>
+    <script type="text/javascript" src="{% static 'd3-drag/build/d3-drag.js' %}"></script>
+    {% block script %}{% endblock %}
+</body>
+</html>
