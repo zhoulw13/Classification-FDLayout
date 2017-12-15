@@ -1,7 +1,6 @@
-from django.shortcuts import render
 from django.http import HttpResponse
-from django.http import JsonResponse
-import json
+from django.shortcuts import render
+
 
 # Create your views here.
 
@@ -10,6 +9,9 @@ def index(request):
 
 
 def get_data(request):
-    with open('web_app/static/data.json') as json_data:
-        d = json.load(json_data)
-    return HttpResponse(json.dumps(d))
+    # with open('web_app/static/data.json') as json_data:
+    #     d = json.load(json_data)
+    # return HttpResponse(json.dumps(d))
+    with open('web_app/static/mnist-500.csv') as data:
+        d = data.read()
+    return HttpResponse(d)

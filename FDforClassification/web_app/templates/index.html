@@ -2,47 +2,164 @@
 
 {% block css %}
     {% load staticfiles %}
-    <link rel="stylesheet" type="text/css" href="{%  static 'css/viewer.css'%}" />
-    <link rel="stylesheet" type="text/css" href="{%  static 'css/data-info-panel.css'%}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/viewer.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/data-info-panel.css' %}"/>
 {% endblock %}
 
 {% block content %}
 
-<div class="col-md-6" style="height: 100%; padding-left: 1px; padding-right: 1px">
-    <div id="fd-panel" class="panel" style="position: relative; width: 100%; height: 100%">
+    <div class="col-md-6" style="height: 100%; padding-left: 1px; padding-right: 1px">
+        <div id="fd-panel" class="panel" style="position: relative; width: 100%; height: 100%">
 
-    </div>
-</div>
-<div class="col-md-6" style="height: 100%; padding-left: 1px; padding-right: 1px">
-    <div id="data-info-panel" class="panel" style="position: relative; width: 100%; height: 60%">
-        <div id="dip-heading">
-            <h2>Data Info</h2>
-        </div>
-        <div id="dip-control" class="dip-content">
-            <h5>Batch Control</h5>
-            <input id="dip-batch-slider" type="text" data-slider-min="0" data-slider-max="200" data-slider-step="10" data-slider-value="0"/>
-            <span>Current Slider Value: <span id="dip-batch-select">0</span></span>
-            <input checked data-toggle="toggle" data-on="<i class='fa fa-play'></i> Start" data-off="<i class='fa fa-pause'></i> Pause" type="checkbox"/>
-        </div>
-        <div id="dip-overall-info" class="dip-content" style="display: block">
-            <h5>Over all info:</h5>
-            <table class="table table-striped">
-                <tr>
-                    <th>Dataset</th>
-                    <th>MINIST</th>
-                </tr>
-                <tr>
-                    <th>Training set size</th>
-                    <th>60000</th>
-                </tr>
-
-            </table>
         </div>
     </div>
-    <div id="loss-panel" class="panel" style="position: relative; width: 100%; height: 40%">
+    <div class="col-md-6" style="height: 100%; padding-left: 1px; padding-right: 1px">
+        <div id="data-info-panel" class="panel" style="position: relative; width: 100%; height: 60%">
+            <div id="dip-heading">
+                <h2>Data Info</h2>
+            </div>
+            <div id="dip-control">
+                <table class="dip-content-table" style="width: 100%;">
+                    <tr>
+                        <th><b>Iteration Control</b></th>
+                        <th><input id="dip-batch-slider" type="text" data-slider-min="0" data-slider-max="200"
+                                   data-slider-step="10" data-slider-value="0"/></th>
+                        <th><span>Current iteration: <span id="dip-batch-select">0</span></span></th>
+                        <th><input checked data-toggle="toggle" data-on="<i class='fa fa-play'></i> Start"
+                                   data-off="<i class='fa fa-pause'></i> Pause" type="checkbox"/></th>
+                    </tr>
+                </table>
 
+            </div>
+            {# No item selected #}
+            <div id="dip-overall-info" class="dip-content" style="display: block">
+                <h4>Overall info:</h4>
+                <table class="table table-striped">
+                    <tr>
+                        <th>Dataset</th>
+                        <th>MINIST</th>
+                    </tr>
+                    <tr>
+                        <th>Training set size</th>
+                        <th>60000</th>
+                    </tr>
+                    <tr>
+                        <th>Test set size</th>
+                        <th>500</th>
+                    </tr>
+                    <tr>
+                        <th>Batch size</th>
+                        <th>64</th>
+                    </tr>
+                    <tr>
+                        <th>Loss</th>
+                        <th id="dip-table-loss">2.32658583984375</th>
+                    </tr>
+                </table>
+            </div>
+            {# Class item selected #}
+            <div id="dip-class-info" class="dip-content" style="display: none;">
+                <h4>Class:&nbsp&nbsp<span id="dip-class-name">1</span></h4>
+                <div class="table-responsive">
+                    <table id="dip-class-image-table" class="table">
+                        <thead>
+                        <tr>
+                            <th>img</th>
+                            <th>name id</th>
+                            <th>1st<br>pro %</th>
+                            <th>2nd<br>pro %</th>
+                            <th>3rd<br>pro %</th>
+                            <th>img</th>
+                            <th>name id</th>
+                            <th>1st<br>pro %</th>
+                            <th>2nd<br>pro %</th>
+                            <th>3rd<br>pro %</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><img src="{% static 'images/dataset/1.png' %}" class="img-rounded" alt="first image">
+                            </td>
+                            <td>1.png</td>
+                            <td>7<br>30.1</td>
+                            <td>5<br>20.3</td>
+                            <td>1<br>15.9</td>
+                            <td><img src="{% static 'images/dataset/1.png' %}" class="img-rounded" alt="first image">
+                            </td>
+                            <td>1.png</td>
+                            <td>7<br>30.1</td>
+                            <td>5<br>20.3</td>
+                            <td>1<br>15.9</td>
+                        </tr>
+                        <tr>
+                            <td><img src="{% static 'images/dataset/1.png' %}" class="img-rounded" alt="first image">
+                            </td>
+                            <td>1.png</td>
+                            <td>7<br>30.1</td>
+                            <td>5<br>20.3</td>
+                            <td>1<br>15.9</td>
+                            <td><img src="{% static 'images/dataset/1.png' %}" class="img-rounded" alt="first image">
+                            </td>
+                            <td>1.png</td>
+                            <td>7<br>30.1</td>
+                            <td>5<br>20.3</td>
+                            <td>1<br>15.9</td>
+                        </tr>
+                        <tr>
+                            <td><img src="{% static 'images/dataset/1.png' %}" class="img-rounded" alt="first image">
+                            </td>
+                            <td>1.png</td>
+                            <td>7<br>30.1</td>
+                            <td>5<br>20.3</td>
+                            <td>1<br>15.9</td>
+                            <td><img src="{% static 'images/dataset/1.png' %}" class="img-rounded" alt="first image">
+                            </td>
+                            <td>1.png</td>
+                            <td>7<br>30.1</td>
+                            <td>5<br>20.3</td>
+                            <td>1<br>15.9</td>
+                        </tr>
+                        <tr>
+                            <td><img src="{% static 'images/dataset/1.png' %}" class="img-rounded" alt="first image">
+                            </td>
+                            <td>1.png</td>
+                            <td>7<br>30.1</td>
+                            <td>5<br>20.3</td>
+                            <td>1<br>15.9</td>
+                            <td><img src="{% static 'images/dataset/1.png' %}" class="img-rounded" alt="first image">
+                            </td>
+                            <td>1.png</td>
+                            <td>7<br>30.1</td>
+                            <td>5<br>20.3</td>
+                            <td>1<br>15.9</td>
+                        </tr>
+                        <tr>
+                            <td><img src="{% static 'images/dataset/1.png' %}" class="img-rounded" alt="first image">
+                            </td>
+                            <td>1.png</td>
+                            <td>7<br>30.1</td>
+                            <td>5<br>20.3</td>
+                            <td>1<br>15.9</td>
+                            <td><img src="{% static 'images/dataset/1.png' %}" class="img-rounded" alt="first image">
+                            </td>
+                            <td>1.png</td>
+                            <td>7<br>30.1</td>
+                            <td>5<br>20.3</td>
+                            <td>1<br>15.9</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {#            #}
+            <div id="dip-sample-info" class="dip-content" style="display: none;">
+
+            </div>
+        </div>
+        <div id="loss-panel" class="panel" style="position: relative; width: 100%; height: 40%">
+
+        </div>
     </div>
-</div>
 
 {% endblock %}
 
@@ -50,7 +167,8 @@
     {% load staticfiles %}
 
     <script type="application/javascript" src="{% static 'js/fd-panel.js' %}"></script>
-    <script type="application/javascript" src="{% static 'js/app.js' %}"></script>
     <script type="application/javascript" src="{% static 'js/data-info-panel.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/app.js' %}"></script>
+
 
 {% endblock %}
