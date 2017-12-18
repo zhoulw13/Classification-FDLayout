@@ -5,6 +5,10 @@ var ViewerApp;
         function App(regionName) {
             _this = this;
             this.fdPanel = new ViewerApp.fdPanel("fd-panel", this);
+            this.dataInfoPanel = new ViewerApp.dataInfoPanel("data-info-panel", this);
+
+            // current iteration id
+            this.iterationId = 0;
 
             this.fetchData();
         }
@@ -13,14 +17,33 @@ var ViewerApp;
             var _this = this;
             $.get("/get_data")
                 .done(function(data) {
-                    _this.data = JSON.parse(data);
+                    // _this.data = JSON.parse(data);
+                    // console.log(_this.data);
+                    // _this.fdPanel.setData(_this.data);
+                    _this.data = Papa.parse(data);
                     console.log(_this.data);
-                    _this.fdPanel.setData(_this.data);
+                    _this.dataInfoPanel.setData(_this.data);
                 })
                 .fail(function() {
                     console.log("Error get data!")
                 });
-        }
+        };
+
+        // callback function to set iteration id
+        App.prototype.setIterationId = function (iterationId) {
+            _this.iterationId = iterationId;
+            //    TODO
+        };
+
+        // callback function to start training simulation from current iterationId
+        App.prototype.startTraining = function () {
+            // TODO
+        };
+
+        // callback function to stop training simulation
+        App.prototype.stopTraining = function () {
+            // TODO
+        };
 
         return App;
     })();

@@ -1,0 +1,32 @@
+.dip-content {
+    margin: 5px;
+    padding: 15px;
+}
+
+#data-info-panel {
+    padding: 10px;
+    overflow: auto;
+}
+
+td .table {
+    text-align: center;
+    vertical-align: middle;
+}
+
+th, td .dip-content-table {
+    padding: 15px;
+}
+
+#dip-class-name {
+    font-size: larger;
+}
+
+.slider.slider-horizontal {
+    width: 350px;
+    height: 20px;
+}
+
+.img-rounded {
+    width: 70px;
+    height: 70px;
+}

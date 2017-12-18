@@ -12,9 +12,9 @@ from torch.autograd import Variable
 parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
 parser.add_argument('--batch-size', type=int, default=64, metavar='N',
                     help='input batch size for training (default: 64)')
-parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N',
+parser.add_argument('--test-batch-size', type=int, default=500, metavar='N',
                     help='input batch size for testing (default: 1000)')
-parser.add_argument('--epochs', type=int, default=3, metavar='N',
+parser.add_argument('--epochs', type=int, default=5, metavar='N',
                     help='number of epochs to train (default: 10)')
 parser.add_argument('--lr', type=float, default=0.01, metavar='LR',
                     help='learning rate (default: 0.01)')
@@ -89,8 +89,8 @@ def train(epoch, content):
             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 epoch, batch_idx * len(data), len(train_loader.dataset),
                 100. * batch_idx / len(train_loader), loss.data[0]))
-        if batch_idx % (epoch * epoch * epoch * epoch * 40) == 0:
-            content = outputTest(epoch, batch_idx, content)
+        if batch_idx % (epoch * epoch * epoch * 10) == 0:
+            content = outputTest(epoch, batch_idx, content, 500)
     return content
 
 def test():
@@ -111,11 +111,12 @@ def test():
         test_loss, correct, len(test_loader.dataset),
         100. * correct / len(test_loader.dataset)))
         
-def outputTest(epoch, batch_idx, content):
+def outputTest(epoch, batch_idx, content, size):
     model.eval()
     test_loss = 0
     labels = np.array([], dtype='str').reshape(0,1)
     probability = np.array([], dtype='str').reshape(0,10)
+    index = 0
     for data, target in test_loader:
         if args.cuda:
             data, target = data.cuda(), target.cuda()
@@ -125,13 +126,16 @@ def outputTest(epoch, batch_idx, content):
         probability = np.concatenate((probability, np.exp(output.data.cpu().numpy()).astype('str')), axis=0)
         test_loss += F.nll_loss(output, target, size_average=False).data[0] # sum up batch loss
         #pred = output.data.max(1, keepdim=True)[1] # get the index of the max log-probability
+        index += 1
+        if size / args.test_batch_size >= index:
+            break
 
-    test_loss /= len(test_loader.dataset)
+    test_loss /= size
     
-    epochs = np.expand_dims(np.repeat(str(epoch), len(test_loader.dataset)), axis=1)
-    batchIds = np.expand_dims(np.repeat(str(batch_idx), len(test_loader.dataset)), axis=1)
-    loss = np.expand_dims(np.repeat(test_loss, len(test_loader.dataset)), axis=1)
-    path = np.expand_dims(np.array([str(i+1)+'.png' for i in range(len(test_loader.dataset))]), axis=1)
+    epochs = np.expand_dims(np.repeat(str(epoch), size), axis=1)
+    batchIds = np.expand_dims(np.repeat(str(batch_idx), size), axis=1)
+    loss = np.expand_dims(np.repeat(test_loss, size), axis=1)
+    path = np.expand_dims(np.array([str(i+1)+'.png' for i in range(size)]), axis=1)
     combine = np.concatenate((epochs, loss, batchIds, labels, path, probability), axis=1)
     return np.concatenate((content, combine), axis=0)
     
@@ -141,4 +145,4 @@ for epoch in range(1, args.epochs + 1):
     test()
 
 header = "Epoch, Loss, BatchId, Label, Path, " + ", ".join([str(i) for i in range(10)])    
-np.savetxt('log/mnist.csv', content, delimiter=',',comments='', header=header, fmt="%s") 
+np.savetxt('log/mnist-500.csv', content, delimiter=',',comments='', header=header, fmt="%s") 
