@@ -12,8 +12,8 @@ var ViewerApp;
         dataInfoPanel.prototype.setData = function (data) {
             _this.data = data.data;
             _this.initialData();
-            // _this.updatePanel4OverAll();
-            _this.updatePanel4Class(2);
+            _this.updatePanel4OverAll();
+            //_this.updatePanel4Class(2);
             // _this.updatePanel4Sample("1.png");
             console.log(_this.data);
         };
@@ -22,6 +22,7 @@ var ViewerApp;
             _this.batchSlider = new Slider("#dip-batch-slider");
             _this.batchSlider.on("slideStop", function (sliderValue) {
                 document.getElementById("dip-batch-select").textContent = sliderValue;
+                console.log(sliderValue);
                 _this.parent.setIterationId(sliderValue);
             });
         };
@@ -35,6 +36,22 @@ var ViewerApp;
 
         dataInfoPanel.prototype.updatePanel4Class = function (classId) {
             _this.batchSlider.setAttribute("max", _this.data[_this.data.length - 1][15]);
+            var iterationId = _this.parent.iterationId;
+
+            var img_list = _this.getClassInfoImgList(classId, iterationId, 10);
+            console.log(iterationId);
+            d3.select("#dip-class-image-table-body")
+                .selectAll('tr')
+                .data(img_list)
+                .enter().append("tr").html(function (d) {
+                 var text = "<td><img src=\"static/images/dataset/";
+                    text = text + d[4];
+                    text = text + "\" class=\"img-rounded\"></td><td>";
+                    text = text + d[4];
+                    text = text + "</td>";
+                    return text;
+            });
+            console.log(img_list);
             $("#dip-overall-info").css("display", "none");
             $("#dip-class-info").css("display", "block");
             $("#dip-sample-info").css("display", "none");
@@ -77,6 +94,24 @@ var ViewerApp;
             var epoch = Math.floor(iter / 940);
             var batch = iter % 940;
             return [epoch, batch];
+        };
+
+        dataInfoPanel.prototype.getClassInfoImgList = function (classId, iterationId, listNum) {
+            // console.log(iterationId);
+            var selectedList = _this.data.filter(function (x) {
+                return (x[15]==iterationId && x[3]==classId);
+            });
+            var pId = classId +5;
+            var returnList = selectedList.sort(function (x, y) {
+                if (x[pId]>y[pId]) {
+                    return -1;
+                }
+                if (x[pId]<y[pId]) {
+                    return 1;
+                }
+                return 0;
+            });
+            return returnList.slice(0, listNum);
         };
 
         return dataInfoPanel;
