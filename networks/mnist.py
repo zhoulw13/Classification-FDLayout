@@ -89,7 +89,7 @@ def train(epoch, content):
             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 epoch, batch_idx * len(data), len(train_loader.dataset),
                 100. * batch_idx / len(train_loader), loss.data[0]))
-        if batch_idx % (epoch * epoch * epoch * 10) == 0:
+        if batch_idx % (10) == 0:
             content = outputTest(epoch, batch_idx, content, 500)
     return content
 
@@ -145,4 +145,4 @@ for epoch in range(1, args.epochs + 1):
     test()
 
 header = "Epoch, Loss, BatchId, Label, Path, " + ", ".join([str(i) for i in range(10)])    
-np.savetxt('log/mnist-500.csv', content, delimiter=',',comments='', header=header, fmt="%s") 
+np.savetxt('log/mnist-500-fixed-interval.csv', content, delimiter=',',comments='', header=header, fmt="%s") 
