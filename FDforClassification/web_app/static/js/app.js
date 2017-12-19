@@ -6,6 +6,7 @@ var ViewerApp;
             _this = this;
             this.fdPanel = new ViewerApp.fdPanel("fd-panel", this);
             this.dataInfoPanel = new ViewerApp.dataInfoPanel("data-info-panel", this);
+            this.lossPanel = new ViewerApp.dataInfoPanel("loss-panel", this);
 
             // current iteration id
             this.iterationId = 0;

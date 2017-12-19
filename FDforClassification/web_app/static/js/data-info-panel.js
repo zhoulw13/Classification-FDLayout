@@ -139,4 +139,3 @@ var ViewerApp;
     ViewerApp.dataInfoPanel = dataInfoPanel;
 })(ViewerApp || (ViewerApp = {}));
 
-
