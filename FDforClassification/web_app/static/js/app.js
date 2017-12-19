@@ -30,7 +30,7 @@ var ViewerApp;
                     console.log("data fetched");
                 })
                 .fail(function() {
-                    console.log("Error get data!")
+                    console.log("Error get data!");
                 });
         };
 
@@ -38,8 +38,9 @@ var ViewerApp;
         App.prototype.setIterationId = function (iterationId) {
             var _this=this;
             _this.iterationId = iterationId;
+            _this.lossPanel.updatePanel();
             // if user selection is class 5
-            this.dataInfoPanel.updatePanel4Class(5);
+            _this.dataInfoPanel.updatePanel4Class(5);
             //    TODO
         };
 

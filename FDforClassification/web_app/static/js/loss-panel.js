@@ -42,6 +42,11 @@ var ViewerApp;
                 .call(d3.axisLeft(yScale));
         };
 
+        lossPanel.prototype.updatePanel = function () {
+            var _this = this;
+            var iterationId = _this.parent.iterationId;
+        };
+
         return lossPanel;
     })();
 
