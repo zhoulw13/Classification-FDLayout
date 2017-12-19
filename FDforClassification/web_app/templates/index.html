@@ -4,6 +4,7 @@
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/viewer.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/data-info-panel.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/loss-panel.css' %}"/>
 {% endblock %}
 
 {% block content %}
@@ -82,7 +83,10 @@
             </div>
         </div>
         <div id="loss-panel" class="panel" style="position: relative; width: 100%; height: 40%">
-
+            <div id="lp-heading">
+                <h2>Loss</h2>
+            </div>
+            <div id="lp-content"></div>
         </div>
     </div>
 
@@ -93,6 +97,7 @@
 
     <script type="application/javascript" src="{% static 'js/fd-panel.js' %}"></script>
     <script type="application/javascript" src="{% static 'js/data-info-panel.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/loss-panel.js' %}"></script>
     <script type="application/javascript" src="{% static 'js/app.js' %}"></script>
 
 
