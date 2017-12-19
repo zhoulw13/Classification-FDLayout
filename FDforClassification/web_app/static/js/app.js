@@ -31,6 +31,7 @@ var ViewerApp;
 
         // callback function to set iteration id
         App.prototype.setIterationId = function (iterationId) {
+            var _this=this;
             _this.iterationId = iterationId;
             // if user selection is class 5
             this.dataInfoPanel.updatePanel4Class(5);
