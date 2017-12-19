@@ -25,6 +25,8 @@ var ViewerApp;
                     _this.initialData();
                     _this.dataInfoPanel.setData(_this.data);
                     _this.lossPanel.setData(_this.data);
+                    // disable mask
+                    $("#mask").css("height", "0%");
                     console.log("data fetched");
                 })
                 .fail(function() {
