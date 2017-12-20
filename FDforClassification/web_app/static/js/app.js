@@ -7,7 +7,7 @@ var ViewerApp;
             _this.data = [];
             _this.fetchData();
             // current iteration id
-            _this.iterationId = 0;
+            _this.iterationId = null;
 
             _this.fdPanel = new ViewerApp.fdPanel("fd-panel", _this);
             _this.dataInfoPanel = new ViewerApp.dataInfoPanel("data-info-panel", _this);
@@ -40,7 +40,9 @@ var ViewerApp;
             _this.iterationId = iterationId;
             _this.lossPanel.updatePanel();
             // if user selection is class 5
-            _this.dataInfoPanel.updatePanel4Class(5);
+            //_this.dataInfoPanel.updatePanel4Class(5);
+            // if user selection is overall
+            _this.dataInfoPanel.updatePanel4OverAll();
             //    TODO
         };
 

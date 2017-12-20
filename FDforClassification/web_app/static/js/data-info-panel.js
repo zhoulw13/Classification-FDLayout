@@ -11,6 +11,9 @@ var ViewerApp;
 
         dataInfoPanel.prototype.initialPanel = function () {
             var _this = this;
+            _this.runButton = $("#dip-run-button");
+            _this.runButton.bootstrapToggle('on');
+            _this.runButton.change(_this.onclickRunButton);
             _this.batchSlider = new Slider("#dip-batch-slider");
             _this.batchSlider.on("slideStop", function (sliderValue) {
                 document.getElementById("dip-batch-select").textContent = sliderValue;
@@ -27,6 +30,9 @@ var ViewerApp;
         dataInfoPanel.prototype.updatePanel4OverAll = function () {
             var _this = this;
             _this.batchSlider.setAttribute("max", _this.data[_this.data.length - 1][15]);
+            var iterationId = _this.parent.iterationId;
+            var loss = _this.getADataWithIter(iterationId)[1];
+            d3.select("#dip-table-loss").text(loss);
             $("#dip-overall-info").css("display", "block");
             $("#dip-class-info").css("display", "none");
             $("#dip-sample-info").css("display", "none");
@@ -46,14 +52,12 @@ var ViewerApp;
                 text = text + "<td>" + pList.sortIndices[2] + "<br>" + pList[2]*100 + "</td>"; // 3rd
                 return text;
             };
-            //console.log(iterationId);
             d3.select("#dip-class-image-table-body")
                 .selectAll('tr').remove();
             d3.select("#dip-class-image-table-body")
                 .selectAll('tr')
                 .data(img_list)
                 .enter().append("tr").html(tableFunc);
-            //console.log(img_list);
             $("#dip-overall-info").css("display", "none");
             $("#dip-class-info").css("display", "block");
             $("#dip-sample-info").css("display", "none");
@@ -102,6 +106,21 @@ var ViewerApp;
                 toSort[j] = toSort[j][0];
             }
             return toSort;
+        };
+
+        dataInfoPanel.prototype.getADataWithIter = function (iterationId) {
+            var _this = this;
+            for (var i in _this.data) {
+                if (_this.data[i][15] == iterationId) {
+                    return _this.data[i];
+                }
+            }
+            return [];
+        };
+
+        dataInfoPanel.prototype.onclickRunButton = function () {
+            if (_this.runButton.prop('checked'))
+            console.log("onclick");
         };
 
         return dataInfoPanel;
