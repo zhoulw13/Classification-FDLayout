@@ -48,7 +48,6 @@ var ViewerApp;
             var _this = this;
             var iterationId = _this.parent.iterationId;
             var lossData = _this.getLossData(iterationId);
-            console.log(lossData);
             var line = d3.line()
                 .x(function (d) {
                     return _this.xScale(d[15]);

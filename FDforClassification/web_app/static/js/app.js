@@ -49,11 +49,16 @@ var ViewerApp;
         // callback function to start training simulation from current iterationId
         App.prototype.startTraining = function () {
             // TODO
+            var _this = this;
+            _this.setIterationId(_this.iterationId + _this.getBatchInterval());
+            _this.timer = setTimeout("myApp.startTraining()", 1000);
         };
 
         // callback function to stop training simulation
         App.prototype.stopTraining = function () {
             // TODO
+            var _this = this;
+            clearTimeout(_this.timer);
         };
 
         App.prototype.initialData = function () {
@@ -86,6 +91,17 @@ var ViewerApp;
             var epoch = Math.floor(iter / 940);
             var batch = iter % 940;
             return [epoch, batch];
+        };
+
+        App.prototype.getBatchInterval = function () {
+            var _this = this;
+            var temp = _this.data[0][15];
+            for (var i in _this.data) {
+                if (_this.data[i][15] != temp) {
+                    return _this.data[i][15] - temp;
+                }
+            }
+            return 0;
         };
 
         return App;

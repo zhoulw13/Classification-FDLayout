@@ -11,9 +11,10 @@ var ViewerApp;
 
         dataInfoPanel.prototype.initialPanel = function () {
             var _this = this;
-            _this.runButton = $("#dip-run-button");
-            _this.runButton.bootstrapToggle('on');
-            _this.runButton.change(_this.onclickRunButton);
+            var runButton = $("#dip-run-button");
+            runButton.bootstrapToggle('on');
+            runButton.change(_this.onclickRunButton);
+
             _this.batchSlider = new Slider("#dip-batch-slider");
             _this.batchSlider.on("slideStop", function (sliderValue) {
                 document.getElementById("dip-batch-select").textContent = sliderValue;
@@ -30,6 +31,8 @@ var ViewerApp;
         dataInfoPanel.prototype.updatePanel4OverAll = function () {
             var _this = this;
             _this.batchSlider.setAttribute("max", _this.data[_this.data.length - 1][15]);
+            _this.updateBatchSlider();
+
             var iterationId = _this.parent.iterationId;
             var loss = _this.getADataWithIter(iterationId)[1];
             d3.select("#dip-table-loss").text(loss);
@@ -41,6 +44,8 @@ var ViewerApp;
         dataInfoPanel.prototype.updatePanel4Class = function (classId) {
             var _this = this;
             _this.batchSlider.setAttribute("max", _this.data[_this.data.length - 1][15]);
+            _this.updateBatchSlider();
+
             var iterationId = _this.parent.iterationId;
             var img_list = _this.getClassInfoImgList(classId, iterationId, 10);
             var tableFunc = function (d) {
@@ -68,9 +73,18 @@ var ViewerApp;
         dataInfoPanel.prototype.updatePanel4Sample = function (samplePath) {
             var _this = this;
             _this.batchSlider.setAttribute("max", _this.data[_this.data.length - 1][15]);
+            _this.updateBatchSlider();
+
             $("#dip-overall-info").css("display", "none");
             $("#dip-class-info").css("display", "none");
             $("#dip-sample-info").css("display", "block");
+        };
+
+        dataInfoPanel.prototype.updateBatchSlider = function () {
+            var _this = this;
+            var iterationId = _this.parent.iterationId;
+            _this.batchSlider.setValue(iterationId);
+            document.getElementById("dip-batch-select").textContent = iterationId;
         };
 
 
@@ -119,8 +133,16 @@ var ViewerApp;
         };
 
         dataInfoPanel.prototype.onclickRunButton = function () {
-            if (_this.runButton.prop('checked'))
-            console.log("onclick");
+            var _this = myApp.dataInfoPanel;
+            var runButton = $("#dip-run-button");
+            if (runButton.prop('checked')) {
+                _this.parent.stopTraining();
+                _this.batchSlider.enable();
+            }
+            else {
+                _this.batchSlider.disable();
+                _this.parent.startTraining();
+            }
         };
 
         return dataInfoPanel;
