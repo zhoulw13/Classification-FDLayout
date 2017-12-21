@@ -86,9 +86,9 @@ var ViewerApp;
 
             var sortedData = _this.sortWithIndeces(dataItem.slice(5, 15));
             var pieChartData = makePieChartDate(sortedData);
-            var width = 300,
-                height = 300,
-                radius = 150;
+            var width = 260,
+                height = 260,
+                radius = 130;
             var color = d3.scaleOrdinal().range(["#98abc5", "#8a89a6", "#7b6888", "#6a6666"]);
 
             var arc = d3.arc().outerRadius(radius-10).innerRadius(0);
