@@ -39,11 +39,12 @@ var ViewerApp;
             var _this=this;
             _this.iterationId = iterationId;
             _this.lossPanel.updatePanel();
+            // if user selection is overall
+            //_this.dataInfoPanel.updatePanel4OverAll();
             // if user selection is class 5
             //_this.dataInfoPanel.updatePanel4Class(5);
-            // if user selection is overall
-            _this.dataInfoPanel.updatePanel4OverAll();
-            //    TODO
+            // if user selection is sample 5.png
+            _this.dataInfoPanel.updatePanel4Sample("5.png");
         };
 
         // callback function to start training simulation from current iterationId
