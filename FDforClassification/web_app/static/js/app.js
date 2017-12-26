@@ -12,6 +12,8 @@ var ViewerApp;
             _this.fdPanel = new ViewerApp.fdPanel("fd-panel", _this);
             _this.dataInfoPanel = new ViewerApp.dataInfoPanel("data-info-panel", _this);
             _this.lossPanel = new ViewerApp.lossPanel("loss-panel", _this);
+
+            this.picname = "15.png";
         }
 
         App.prototype.fetchData = function() {
@@ -25,6 +27,7 @@ var ViewerApp;
                     _this.initialData();
                     _this.dataInfoPanel.setData(_this.data);
                     _this.lossPanel.setData(_this.data);
+                    _this.fdPanel.setData(_this.data);
                     // disable mask
                     $("#mask").css("height", "0%");
                     console.log("data fetched");
@@ -39,20 +42,33 @@ var ViewerApp;
             var _this=this;
             _this.iterationId = iterationId;
             _this.lossPanel.updatePanel();
+            _this.fdPanel.setIter(iterationId / 10);
             // if user selection is overall
             //_this.dataInfoPanel.updatePanel4OverAll();
             // if user selection is class 5
             //_this.dataInfoPanel.updatePanel4Class(5);
             // if user selection is sample 15.png
-            _this.dataInfoPanel.updatePanel4Sample("15.png");
+            this.dataInfoPanel.updatePanel4Sample(this.picname);
         };
 
+        App.prototype.onDataSeleted = function (picname) {
+            this.picname = picname;
+            this.dataInfoPanel.updatePanel4Sample(picname);
+        }
+        
         // callback function to start training simulation from current iterationId
         App.prototype.startTraining = function () {
             // TODO
             var _this = this;
             _this.setIterationId(_this.iterationId + _this.getBatchInterval());
-            _this.timer = setTimeout("myApp.startTraining()", 1000);
+            if(_this.iterationId < 4690)
+            {
+                _this.timer = setTimeout("myApp.startTraining()", 1000);
+            }
+            else
+            {
+                this.stopTraining();
+            }
         };
 
         // callback function to stop training simulation
