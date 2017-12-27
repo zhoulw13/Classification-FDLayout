@@ -30,11 +30,15 @@ var ViewerApp;
 
         dataInfoPanel.prototype.updatePanel4OverAll = function () {
             var _this = this;
+            var loss = 0.0;
             _this.batchSlider.setAttribute("max", _this.data[_this.data.length - 1][15]);
             _this.updateBatchSlider();
 
             var iterationId = _this.parent.iterationId;
-            var loss = _this.getADataWithIter(iterationId)[1];
+            if (_this.getADataWithIter(iterationId)[1] !== undefined)
+            {
+                var loss = (_this.getADataWithIter(iterationId)[1]).toFixed(5);
+            }
             d3.select("#dip-table-loss").text(loss);
             $("#dip-overall-info").css("display", "block");
             $("#dip-class-info").css("display", "none");
@@ -52,9 +56,9 @@ var ViewerApp;
                 var pList = _this.sortWithIndeces(d.slice(5, 15));
                 var text = "<td><img src=\"static/images/dataset/" + d[4] + "\" class=\"img-rounded\"></td>"; // img
                 text = text + "<td>" + d[4] + "</td>"; // name
-                text = text + "<td>" + pList.sortIndices[0] + "<br>" + pList[0]*100 + "</td>"; // 1st
-                text = text + "<td>" + pList.sortIndices[1] + "<br>" + pList[1]*100 + "</td>"; // 2nd
-                text = text + "<td>" + pList.sortIndices[2] + "<br>" + pList[2]*100 + "</td>"; // 3rd
+                text = text + "<td>" + pList.sortIndices[0] + "<br>" + (pList[0]*100).toFixed(3) + "</td>"; // 1st
+                text = text + "<td>" + pList.sortIndices[1] + "<br>" + (pList[1]*100).toFixed(3) + "</td>"; // 2nd
+                text = text + "<td>" + pList.sortIndices[2] + "<br>" + (pList[2]*100).toFixed(3) + "</td>"; // 3rd
                 return text;
             };
             d3.select("#dip-class-image-table-body")
