@@ -113,6 +113,7 @@ var ViewerApp;
 
             this.context = document.querySelector("canvas").getContext("2d");
 
+
             this.drawLink = function(d) {
                 var alpha = _this.data[d.source.index - 10 + _this.test_number * _this.iter][d.target.index + 5];
                 if(alpha > 0.2)
@@ -163,16 +164,39 @@ var ViewerApp;
                   _this.context.restore();
             };
 
+
+            this.simulation = d3.forceSimulation(this.nodes)
+                .alphaDecay(0.1)
+                .force("charge", d3.forceManyBody())
+                .force("collide", d3.forceCollide().radius(function (node) {
+                    if(node.index < 10)
+                    {
+                        return 10;
+                    }
+                    return 1;
+                }).strength(2))
+                .force("link", d3.forceLink(this.links).distance(20).strength(function (link) {
+                    if(link.type == 0)
+                    {
+                        return 0.1;
+                    }
+                    return _this.data[link.source.index - 10 + _this.test_number * _this.iter][link.target.index + 5];
+                }))
+                .force("x", d3.forceX())
+                .force("y", d3.forceY())
+                .on("tick", this.ticked);
+
             this.dragsubject = function() {
                 var node = _this.simulation.find(d3.event.x - _this.width / 2, d3.event.y - _this.height / 2, 20);
                 if(node)
                 {
                     _this.selectedId = node.index;
-                    if(node.index >= 10)
-                    {
-                        _this.parent.onDataSeleted(_this.data[_this.selectedId - 10][4]);
-                    }
                 }
+                else
+                {
+                    _this.selectedId = -1;
+                }
+                _this.parent.onDataSeleted(node);
                 return node;
             }
 
@@ -200,24 +224,24 @@ var ViewerApp;
                     .on("start", this.dragstarted)
                     .on("drag", this.dragged)
                     .on("end", this.dragended));
+
+
         }
 
         fdPanel.prototype.render = function() {
             var _this = this;
-            this.simulation = d3.forceSimulation(this.nodes)
-                .alphaDecay(0.1)
-                .force("charge", d3.forceManyBody())
-                //.force("collide", d3.forceCollide().radius(1).strength(2))
+            this.simulation.stop();
+            this.simulation.alpha(0.3)
+                .alphaDecay(0.0228)
+                //.alphaMin(0.1)
                 .force("link", d3.forceLink(this.links).distance(20).strength(function (link) {
                     if(link.type == 0)
                     {
-                        return 1;
+                        return 0.1;
                     }
                     return _this.data[link.source.index - 10 + _this.test_number * _this.iter][link.target.index + 5];
-                }))
-                .force("x", d3.forceX())
-                .force("y", d3.forceY())
-                .on("tick", this.ticked);
+                }));
+            this.simulation.restart();
         };
 
         fdPanel.prototype.clear = function() {

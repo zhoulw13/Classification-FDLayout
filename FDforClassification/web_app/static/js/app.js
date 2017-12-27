@@ -13,7 +13,6 @@ var ViewerApp;
             _this.dataInfoPanel = new ViewerApp.dataInfoPanel("data-info-panel", _this);
             _this.lossPanel = new ViewerApp.lossPanel("loss-panel", _this);
 
-            this.picname = "15.png";
         }
 
         App.prototype.fetchData = function() {
@@ -48,12 +47,27 @@ var ViewerApp;
             // if user selection is class 5
             //_this.dataInfoPanel.updatePanel4Class(5);
             // if user selection is sample 15.png
-            this.dataInfoPanel.updatePanel4Sample(this.picname);
+            this.onDataSeleted(this.selectedNode);
         };
 
-        App.prototype.onDataSeleted = function (picname) {
-            this.picname = picname;
-            this.dataInfoPanel.updatePanel4Sample(picname);
+        App.prototype.onDataSeleted = function (node) {
+            this.selectedNode = node;
+            if(node)
+            {
+                if(node.index >= 10)
+                {
+                    this.picname = this.data[node.index - 10][4];
+                    this.dataInfoPanel.updatePanel4Sample(this.picname);
+                }
+                else
+                {
+                    this.dataInfoPanel.updatePanel4Class(node.index);
+                }
+            }
+            else
+            {
+                    this.dataInfoPanel.updatePanel4OverAll();
+            }
         }
         
         // callback function to start training simulation from current iterationId
