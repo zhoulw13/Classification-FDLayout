@@ -44,18 +44,18 @@ var ViewerApp;
             _this.lossPanel.updatePanel();
             _this.fdPanel.setIter(iterationId / 10);
             // if user selection is overall
-            //_this.dataInfoPanel.updatePanel4OverAll();
+            _this.dataInfoPanel.updatePanel4OverAll();
             // if user selection is class 5
             //_this.dataInfoPanel.updatePanel4Class(5);
-            // if user selection is sample 123.png
-            _this.dataInfoPanel.updatePanel4Sample("123.png");
+            // if user selection is sample 15.png
+            //_this.dataInfoPanel.updatePanel4Sample(this.picname);
         };
 
         App.prototype.onDataSeleted = function (picname) {
             this.picname = picname;
             this.dataInfoPanel.updatePanel4Sample(picname);
-        }
-
+        };
+        
         // callback function to start training simulation from current iterationId
         App.prototype.startTraining = function () {
             // TODO
