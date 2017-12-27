@@ -6,6 +6,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
+from sklearn.manifold import TSNE
 from torch.autograd import Variable
 
 # Training settings
@@ -26,6 +27,7 @@ parser.add_argument('--seed', type=int, default=1, metavar='S',
                     help='random seed (default: 1)')
 parser.add_argument('--log-interval', type=int, default=10, metavar='N',
                     help='how many batches to wait before logging training status')
+parser.add_argument('--output-tsne', type=bool, default=False)
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 
@@ -33,7 +35,11 @@ torch.manual_seed(args.seed)
 if args.cuda:
     torch.cuda.manual_seed(args.seed)
 
-content = np.array([], dtype='str').reshape(0,15)
+if not args.output_tsne:
+    content = np.array([], dtype='str').reshape(0,15)
+else:
+    content = np.array([], dtype='str').reshape(0,7)
+
 kwargs = {'num_workers': 1, 'pin_memory': True} if args.cuda else {}
 train_loader = torch.utils.data.DataLoader(
     datasets.MNIST('datasets/mnist/', train=True, download=True,
@@ -63,10 +69,10 @@ class Net(nn.Module):
         x = F.relu(F.max_pool2d(self.conv1(x), 2))
         x = F.relu(F.max_pool2d(self.conv2_drop(self.conv2(x)), 2))
         x = x.view(-1, 320)
-        x = F.relu(self.fc1(x))
-        x = F.dropout(x, training=self.training)
+        fc1 = F.relu(self.fc1(x))
+        x = F.dropout(fc1, training=self.training)
         x = self.fc2(x)
-        return F.log_softmax(x)
+        return F.log_softmax(x), fc1
 
 model = Net()
 if args.cuda:
@@ -81,7 +87,7 @@ def train(epoch, content):
             data, target = data.cuda(), target.cuda()
         data, target = Variable(data), Variable(target)
         optimizer.zero_grad()
-        output = model(data)
+        output, fc1 = model(data)
         loss = F.nll_loss(output, target)
         loss.backward()
         optimizer.step()
@@ -101,7 +107,7 @@ def test():
         if args.cuda:
             data, target = data.cuda(), target.cuda()
         data, target = Variable(data, volatile=True), Variable(target)
-        output = model(data)
+        output, fc1 = model(data)
         test_loss += F.nll_loss(output, target, size_average=False).data[0] # sum up batch loss
         pred = output.data.max(1, keepdim=True)[1] # get the index of the max log-probability
         correct += pred.eq(target.data.view_as(pred)).cpu().sum()
@@ -115,15 +121,25 @@ def outputTest(epoch, batch_idx, content, size):
     model.eval()
     test_loss = 0
     labels = np.array([], dtype='str').reshape(0,1)
-    probability = np.array([], dtype='str').reshape(0,10)
     index = 0
+    
+    if not args.output_tsne:
+        probability = np.array([], dtype='str').reshape(0,10)
+    else:
+        probability = np.array([], dtype='str').reshape(0,2)
+
     for data, target in test_loader:
         if args.cuda:
             data, target = data.cuda(), target.cuda()
         data, target = Variable(data, volatile=True), Variable(target)
-        output = model(data)
+        output, fc1 = model(data)
         labels = np.concatenate((labels, np.expand_dims(target.data.cpu().numpy(), axis=1).astype('str')), axis=0)
-        probability = np.concatenate((probability, np.exp(output.data.cpu().numpy()).astype('str')), axis=0)
+        if not args.output_tsne:
+            probability = np.concatenate((probability, np.exp(output.data.cpu().numpy()).astype('str')), axis=0)
+        else:
+            features_embedded = TSNE(n_components=2, perplexity=40).fit_transform(fc1.data.cpu().numpy()).astype('str')
+            probability = np.concatenate((probability, features_embedded.astype('str')), axis=0)
+            
         test_loss += F.nll_loss(output, target, size_average=False).data[0] # sum up batch loss
         #pred = output.data.max(1, keepdim=True)[1] # get the index of the max log-probability
         index += 1
@@ -137,12 +153,21 @@ def outputTest(epoch, batch_idx, content, size):
     loss = np.expand_dims(np.repeat(test_loss, size), axis=1)
     path = np.expand_dims(np.array([str(i+1)+'.png' for i in range(size)]), axis=1)
     combine = np.concatenate((epochs, loss, batchIds, labels, path, probability), axis=1)
+    
     return np.concatenate((content, combine), axis=0)
     
 
 for epoch in range(1, args.epochs + 1):
     content = train(epoch, content)
-    test()
+    #test()
 
-header = "Epoch, Loss, BatchId, Label, Path, " + ", ".join([str(i) for i in range(10)])    
-np.savetxt('log/mnist-500-fixed-interval.csv', content, delimiter=',',comments='', header=header, fmt="%s") 
+if not args.output_tsne:
+    header = "Epoch,Loss,BatchId,Label,Path," + ",".join([str(i) for i in range(10)])    
+    np.savetxt('log/mnist-500-fixed-interval.csv', content, delimiter=',',comments='', header=header, fmt="%s") 
+else:
+    header = "Epoch,Loss,BatchId,Label,Path,X,Y"
+    np.savetxt('log/mnist-500-tsne-data.csv', content, delimiter=',',comments='', header=header, fmt="%s") 
+
+
+
+    
