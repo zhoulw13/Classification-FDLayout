@@ -68,7 +68,7 @@ var ViewerApp;
             {
                     this.dataInfoPanel.updatePanel4OverAll();
             }
-        }
+        };
         
         // callback function to start training simulation from current iterationId
         App.prototype.startTraining = function () {
