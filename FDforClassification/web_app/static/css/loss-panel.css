@@ -9,7 +9,7 @@
 }
 
 /* Style the lines by removing the fill and applying a stroke */
-.line {
+.loss-line {
     fill: none;
     stroke: #ffab00;
     stroke-width: 3;

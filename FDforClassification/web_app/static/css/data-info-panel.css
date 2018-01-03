@@ -8,9 +8,14 @@
     overflow: auto;
 }
 
-td .table {
+th {
     text-align: center;
-    vertical-align: middle;
+    vertical-align: middle !important;
+}
+
+td {
+    text-align: center;
+    vertical-align: middle !important;
 }
 
 th, td .dip-content-table {
@@ -29,4 +34,13 @@ th, td .dip-content-table {
 .img-rounded {
     width: 70px;
     height: 70px;
+}
+
+.arc text {
+  font: 12px sans-serif;
+  text-anchor: middle;
+}
+
+.arc path {
+  stroke: #fff;
 }

@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load staticfiles %}
+
     <link rel="stylesheet" type="text/css" href="{%  static 'bootstrap/dist/css/bootstrap.css'%}" />
     <link rel="stylesheet" type="text/css" href="{%  static 'bootstrap-toggle/css/bootstrap-toggle.css'%}" />
     <link rel="stylesheet" type="text/css" href="{%  static 'bootstrap-slider/css/bootstrap-slider.css'%}" />
@@ -39,6 +40,11 @@
     <script type="text/javascript" src="{% static 'd3-geo/build/d3-geo.js' %}"></script>
     <script type="text/javascript" src="{% static 'd3-drag/build/d3-drag.js' %}"></script>
     <script type="text/javascript" src="{% static 'PapaParse/papaparse.js' %}"></script>
+    <script type="text/javascript" src="{% static 'd3-force/build/d3-force.js' %}"></script>
+    <script type="text/javascript" src="{% static 'd3-collection/build/d3-collection.js' %}"></script>
+    <script type="text/javascript" src="{% static 'd3-dispatch/build/d3-dispatch.js' %}"></script>
+    <script type="text/javascript" src="{% static 'd3-quadtree/build/d3-quadtree.js' %}"></script>
+    <script type="text/javascript" src="{% static 'd3-timer/build/d3-timer.js' %}"></script>
 
     {% block script %}{% endblock %}
 </body>
