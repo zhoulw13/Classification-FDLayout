@@ -80,7 +80,8 @@ var ViewerApp;
                  .attr("r", 2.5)
                  .attr("cx", function(d) { return _this.xScalar(d[5]); })
                  .attr("cy", function(d) { return _this.yScalar(d[6]); })
-                 .style("fill", function(d) { return _this.colorSheet[d[3]]});
+                 .style("fill", function(d) { return _this.colorSheet[d[3]]})
+                 .on('click', function(d) { _this.parent.onDataSeleted({index: parseInt(d[4].slice(0, -4))+9}) });
         }
 
         tsnePanel.prototype.render = function() {
@@ -97,6 +98,11 @@ var ViewerApp;
         tsnePanel.prototype.getIterationData = function(iter) {
             var _this = this;
             return _this.data.slice(iter*_this.test_number,(iter+1)*_this.test_number)
+        }
+
+        tsnePanel.prototype.onClicked = function(d) {
+            var _this = this;
+            _this.parent.onDataSeleted({index: parseInt(d[4].slice(0, -4))})
         }
 
         tsnePanel.prototype.clear = function() {
