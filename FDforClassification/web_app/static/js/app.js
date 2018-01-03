@@ -5,6 +5,7 @@ var ViewerApp;
         function App(regionName) {
             var _this = this;
             _this.data = [];
+            _this.tsneData = [];
             _this.fetchData();
             // current iteration id
             _this.iterationId = null;
@@ -12,12 +13,13 @@ var ViewerApp;
             _this.fdPanel = new ViewerApp.fdPanel("fd-panel", _this);
             _this.dataInfoPanel = new ViewerApp.dataInfoPanel("data-info-panel", _this);
             _this.lossPanel = new ViewerApp.lossPanel("loss-panel", _this);
+            _this.tsnePanel = new ViewerApp.tsnePanel("tsne-panel", _this);
 
         }
 
         App.prototype.fetchData = function() {
             var _this = this;
-            $.get("/get_data")
+            $.get("/get_data", 'file=web_app/static/mnist-500-fixed-interval.csv')
                 .done(function(data) {
                     // _this.data = JSON.parse(data);
                     // console.log(_this.data);
@@ -27,8 +29,21 @@ var ViewerApp;
                     _this.dataInfoPanel.setData(_this.data);
                     _this.lossPanel.setData(_this.data);
                     _this.fdPanel.setData(_this.data);
+
                     // disable mask
                     $("#mask").css("height", "0%");
+                    console.log("data fetched");
+                })
+                .fail(function() {
+                    console.log("Error get data!");
+                });
+
+            $.get("/get_data", 'file=web_app/static/mnist-500-tsne-data.csv')
+                .done(function(data) {
+                    _this.tsneData = Papa.parse(data);
+                    _this.initialTsneData();
+                    _this.tsnePanel.setData(_this.tsneData);
+
                     console.log("data fetched");
                 })
                 .fail(function() {
@@ -42,6 +57,7 @@ var ViewerApp;
             _this.iterationId = iterationId;
             _this.lossPanel.updatePanel();
             _this.fdPanel.setIter(iterationId / 10);
+            _this.tsnePanel.setIter(iterationId / 10);
             // if user selection is overall
             //_this.dataInfoPanel.updatePanel4OverAll();
             // if user selection is class 5
@@ -109,6 +125,26 @@ var ViewerApp;
                 }
                 // compute iteration id
                 _this.data[i].push(_this.batch2iter(_this.data[i][0], _this.data[i][2]));
+            }
+        };
+
+        App.prototype.initialTsneData = function () {
+            var _this = this;
+            _this.tsneData = _this.tsneData.data;
+            // delete field row
+            _this.tsneData.shift();
+            // delete blank row
+            _this.tsneData.pop();
+            for (var i = 0; i < _this.tsneData.length; i++) {
+                _this.tsneData[i][0] = parseInt(_this.tsneData[i][0]);
+                _this.tsneData[i][1] = parseFloat(_this.tsneData[i][1]);
+                _this.tsneData[i][2] = parseInt(_this.tsneData[i][2]);
+                _this.tsneData[i][3] = parseInt(_this.tsneData[i][3]);
+                _this.tsneData[i][5] = parseFloat(_this.tsneData[i][5]);
+                _this.tsneData[i][6] = parseFloat(_this.tsneData[i][6]);
+
+                // compute iteration id
+                _this.tsneData[i].push(_this.batch2iter(_this.tsneData[i][0], _this.tsneData[i][2]));
             }
         };
 
