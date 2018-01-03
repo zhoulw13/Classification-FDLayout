@@ -18,7 +18,7 @@ Now you can brose `http://127.0.0.1:8000` to see the result according to the ins
 
 ## Functions
 
-The T-SNE panel on the left is only build for reference. You can see why we force-directed layout instead of T-SNE there. The main part of the project that we want to show is the FD-layout in the middle.
+The T-SNE panel on the left is only build for reference. You can see why we force-directed layout instead of T-SNE there. The main part of the project that we want to show is the FD-layout in the middle. On the whole, T-SNE is not as flexible as fd-layout. It takes more time to iterate and unpredictable on the cordinate values changing step by step. We should say that TSNE is more suitable for visulizing static data instead of dynamic data changing while training.
 
 ### Run the training
 
